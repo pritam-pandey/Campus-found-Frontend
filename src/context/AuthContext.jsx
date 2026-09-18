@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { authAPI } from '../api/endpoints';
+import { setStoredToken } from '../api/client';
 
 const AuthContext = createContext(null);
 
@@ -27,6 +28,7 @@ export function AuthProvider({ children }) {
     const data = await authAPI.login(credentials);
     setUser(data.user);
     setToken(data.token);
+    setStoredToken(data.token); // persists auth across reloads when cookies are blocked cross-origin
     return data.user;
   }, []);
 
@@ -34,6 +36,7 @@ export function AuthProvider({ children }) {
     const data = await authAPI.register(payload);
     setUser(data.user);
     setToken(data.token);
+    setStoredToken(data.token);
     return data.user;
   }, []);
 
@@ -43,6 +46,7 @@ export function AuthProvider({ children }) {
     } finally {
       setUser(null);
       setToken(null);
+      setStoredToken(null);
     }
   }, []);
 

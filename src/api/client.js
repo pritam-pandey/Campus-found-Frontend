@@ -17,6 +17,23 @@ const api = axios.create({
   withCredentials: true, // send the httpOnly JWT cookie
 });
 
+/* Bearer-token fallback: when frontend and backend are hosted on different
+   origins, browsers that block third-party cookies (Safari, Firefox) would
+   drop the session cookie — the token from the login response keeps auth
+   working everywhere. */
+const TOKEN_KEY = 'cf_token';
+export const getToken = () => localStorage.getItem(TOKEN_KEY) || '';
+export const setStoredToken = (t) => {
+  if (t) localStorage.setItem(TOKEN_KEY, t);
+  else localStorage.removeItem(TOKEN_KEY);
+};
+
+api.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 api.interceptors.response.use(
   (res) => res,
   (error) => {

@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from './AuthContext.jsx';
-import { API_BASE } from '../api/client';
+import { API_BASE, getToken } from '../api/client';
 
 // Socket.IO shares the backend origin: same-origin in dev (Vite proxy) and
 // when the SPA is served by the backend; the API host when deployed apart.
@@ -22,7 +22,7 @@ export function SocketProvider({ children }) {
     }
 
     const s = io(SOCKET_URL || '/', {
-      auth: { token: token || document.cookie.split('token=')[1]?.split(';')[0] },
+      auth: { token: token || getToken() || document.cookie.split('token=')[1]?.split(';')[0] },
       transports: ['websocket', 'polling'],
     });
 
