@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-export const API_BASE = import.meta.env.VITE_API_URL || '/api';
+/* Normalize VITE_API_URL: accept "https://api.host" or "https://api.host/api",
+   with or without trailing slashes — always end with the /api prefix that the
+   endpoint wrappers expect. Relative default stays same-origin (dev proxy). */
+const RAW_BASE = (import.meta.env.VITE_API_URL || '/api').trim();
+export const API_BASE = /^https?:\/\//i.test(RAW_BASE)
+  ? RAW_BASE.replace(/\/+$/, '').replace(/\/api$/i, '') + '/api'
+  : RAW_BASE.replace(/\/+$/, '') || '/api';
 
 // When the frontend and backend are hosted separately, backend image URLs
 // arrive as relative paths ("/uploads/x.jpg") and must be resolved against
