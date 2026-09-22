@@ -27,7 +27,7 @@ export default function Register() {
   const validate = () => {
     const errs = {};
     if (!form.fullName.trim()) errs.fullName = 'Full name is required';
-    if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = 'A valid email is required';
+    if (!/^[A-Za-z0-9](?:[A-Za-z0-9._%+-]*[A-Za-z0-9])?@gmail\.com$/.test(form.email)) errs.email = 'Only a valid Gmail address (@gmail.com) is allowed';
     if (!/^\+?[0-9]{7,15}$/.test(form.mobile)) errs.mobile = 'A valid mobile number is required';
     if (!form.studentId.trim()) errs.studentId = 'Student ID is required';
     if (!form.department) errs.department = 'Department is required';
@@ -90,7 +90,7 @@ export default function Register() {
           <div className="sm:col-span-2">
             {field('fullName', 'Full name', { placeholder: 'Rahul Ahmed', required: true })}
           </div>
-          {field('email', 'Email', { type: 'email', placeholder: 'you@campus.edu', required: true })}
+          {field('email', 'Email (Gmail only)', { type: 'email', placeholder: 'you@gmail.com', required: true })}
           {field('mobile', 'Mobile number', { type: 'tel', placeholder: '+8801700000002', required: true })}
           {field('studentId', 'Student ID', { placeholder: 'CSE2101', required: true })}
           <div>
