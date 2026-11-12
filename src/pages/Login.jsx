@@ -9,6 +9,7 @@ export default function Login() {
   const location = useLocation();
   const [form, setForm] = useState({ mobile: '', password: '' });
   const [error, setError] = useState('');
+  const [notice] = useState(location.state?.message || '');
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -39,6 +40,12 @@ export default function Login() {
             <p className="mt-1 text-sm text-slate-500">Log in to your Campus Found account</p>
           </div>
         </div>
+
+        {notice && !error && (
+          <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            {notice}
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -72,6 +79,14 @@ export default function Login() {
               value={form.password}
               onChange={handleChange}
             />
+            <div className="mt-2 text-right">
+              <Link
+                to="/forgot-password"
+                className="text-sm font-semibold text-primary-600 hover:text-primary-700"
+              >
+                Forgot password?
+              </Link>
+            </div>
           </div>
           <button type="submit" disabled={submitting} className="btn-primary w-full">
             {submitting ? 'Logging in…' : 'Log in'}
